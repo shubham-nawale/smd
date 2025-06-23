@@ -12,10 +12,11 @@ import AdminLogin from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import Contact from './components/Contact';
-
+import Header from './components/Header';
 function App() {
   return (
     <div>
+      <Header/>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/gallery" element={<Gallery />} />

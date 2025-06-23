@@ -1,5 +1,5 @@
 const WhatsappButton = () => {
-    const phoneNumber = "+919561349346"; // ✅ Replace with your number (include country code)
+    const phoneNumber = "+919172234826"; // ✅ Replace with your number (include country code)
     const message = "नमस्कार! मला तुमच्याकडून मंडप सजावटीबद्दल माहिती हवी आहे."; // Pre-filled message
   
     return (

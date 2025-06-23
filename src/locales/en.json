@@ -1,5 +1,9 @@
 {
-    "highlightTitle": "Welcome to Shivprasad Mandap Decoration",
+    "heroTitle": "Elegant Mandap Decorations for Your Perfect Day",
+    "heroSubtitle": "Transform your wedding ceremony into a magical experience with our exquisite mandap decoration services. We create beautiful, personalized settings for your special moment.",
+    "heroBtnBook": "Book Consultation",
+    "heroBtnGallery": "View Gallery",
+    "highlightTitle": "Shivprasad Mandap Decoration",
     "welcomeMessage": "We Decorate Your Events with Fullest",
     "gallery": "Gallery",
     "offers": "Offers",
@@ -12,6 +16,21 @@
     "offer1": "10% off on September bookings!",
     "offer2": "Free flower decor – this month only!",
     "contactUs": "Contact Us",
-    "addressLine": "Ganeshnagar, Shahartakali, Tal: Shevgaon, Dist: Ahilyanagar"
+    "addressLine": "Ganeshnagar, Shahartakali, Tal: Shevgaon, Dist: Ahilyanagar",
+    "contactTitle": "Book Your Consultation",
+    "contactSubtitle": "Let's discuss how we can make your event special with our decoration services.",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "addressText": "Shivprasad Mandap, Shahartakli, Shevgaon, Ahmednagar",
+    "phone": "Phone",
+    "phone1": "+91 98227 84263",
+    "phone2": "+91 91722 34826",
+    "email": "Email",
+    "emailText": "info@shivprasadmandap.com",
+    "hours": "Business Hours",
+    "hours1": "Mon–Sat: 9:00 AM – 6:00 PM",
+    "hours2": "Sunday: By appointment",
+    "socialTitle": "Connect With Us",
+    "socialSubtitle": "Follow us on social media for updates."
   }
   

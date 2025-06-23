@@ -32,15 +32,15 @@ const DashboardHome = () => {
         >
           📋 सर्व बिले पहा
         </Link>
-
-        <button
-          onClick={handleLogout}
-          className="col-span-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-xl text-lg shadow"
-        >
-          🚪 लॉगआउट
-        </button>
       </div>
+        <div class="relative h-64 bg-gray-200">
+            <button onClick={handleLogout}
+                className=" absolute bottom-0 col-span-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-xl text-lg shadow left-1/2 transform -translate-x-1/2">
+                    लॉगआउट
+        </button>
+        </div>
     </div>
+    
   );
 };
 
