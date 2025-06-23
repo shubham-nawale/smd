@@ -13,12 +13,15 @@ import AdminDashboard from './pages/AdminDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import Contact from './components/Contact';
 import Header from './components/Header';
+import SingleBill from './components/SingleBill';
+
 function App() {
   return (
     <div>
       <Header/>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/bill/:id" element={<SingleBill />} />
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/admin" element={<AdminPanel />} />
       <Route path="/billing" element={<Billing />} />

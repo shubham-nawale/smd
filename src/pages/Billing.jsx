@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { db } from '../firebase/config';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 const defaultItems = [
   { id: 1, name: 'मंडप साईज', qty: 0, rate: 0 },
@@ -22,7 +23,7 @@ const defaultItems = [
   { id: 17, name: 'चपाती भट्टी (डबल)', qty: 0, rate: 300 },  
   { id: 18, name: 'विळी', qty: 0, rate: 15 },
   { id: 19, name: 'बेलने पोळपाट', qty: 0, rate: 15 },
-  { id: 20, name: 'दांडी पातीले', qty: 0, rate:  50},
+  { id: 20, name: 'दांडी पातीले', qty: 0, rate: 50 },
   { id: 21, name: 'खुर्ची', qty: 0, rate: 5 },
   { id: 22, name: 'गादी', qty: 0, rate: 100 },
   { id: 23, name: 'मॅट', qty: 0, rate: 50 },
@@ -30,8 +31,7 @@ const defaultItems = [
 ];
 
 const BillingPad = () => {
-  const printRef = useRef();
-  const [printMode, setPrintMode] = useState(false);
+  const navigate = useNavigate();
 
   const [customer, setCustomer] = useState({
     name: '',
@@ -42,6 +42,7 @@ const BillingPad = () => {
   });
 
   const [items, setItems] = useState(defaultItems);
+
   const updateItem = (id, field, value) => {
     setItems(prev =>
       prev.map(item => item.id === id ? { ...item, [field]: parseInt(value) || 0 } : item)
@@ -50,98 +51,24 @@ const BillingPad = () => {
 
   const total = items.reduce((sum, item) => sum + item.qty * item.rate, 0);
   const balance = total - parseInt(customer.advance || 0);
-  const handlePrint = async () => {
-    // Save to Firestore
-try {
-  await addDoc(collection(db, "bills"), {
-    customer,
-    items: items.filter(item => item.qty > 0), // only non-zero items
-    total,
-    balance,
-    createdAt: Timestamp.now()
-  });
-  console.log("✅ Bill saved successfully.");
-} catch (error) {
-  console.error("❌ Error saving bill:", error);
-}
 
-    setPrintMode(true);
-  
-    setTimeout(() => {
-      const content = printRef.current.innerHTML;
-  
-      
-      // ✅ Format customer info manually
-      const customerTable = `
-        <table style="width: 100%; margin-top: 1px; font-size: 11px;">
-          <tr>
-            <td><strong>ग्राहकाचे नाव:</strong> ${customer.name}</td>
-            <td><strong>फोन नंबर:</strong> ${customer.phone}</td>
-          </tr>
-          <tr>
-            <td><strong>पत्ता:</strong> ${customer.address}</td>
-            <td><strong>कार्यक्रमाची तारीख:</strong> ${customer.eventDate}</td>
-          </tr>
-        </table>
-      `;
-  
-      const win = window.open('', '', 'width=800,height=600');
-      win.document.write(`
-        <html>
-          <head>
-            <title>श्री</title>
-            <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
-            <style>
-              body {
-                font-family: 'Baloo 2', 'Noto Sans Devanagari', sans-serif;
-                padding: 20px;
-              }
-              table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 14px;
-              }
-              th, td {
-                border: 1px solid #000;
-                padding: 6px;
-                text-align: left;
-                vertical-align: top;
-              }
-              .text-right {
-                text-align: right;
-              }
-              .subtitle {
-                text-align: center;
-                font-size: 18px;
-                font-weight: bold;
-                margin-bottom: 4px;
-              }
-              .subtitle1 {
-                text-align: center;
-                font-size: 14px;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="subtitle">शिवप्रसाद मंडप डेकोरेशन अँड डिजिटल साऊंड सिस्टिम</div>
-            <div class="subtitle1">
-              भांडी भांडार व विजय फोटोज अँड व्हिडिओ, शहरटाकळी(गनेशनगर), ता.शेवगाव, जि.अ.नगर<br>
-              प्रो.प्रा. नवले पा. मो. 9822784263, 9284069932 | सुशिल (सोनु) नवले: 9172234826
-            </div>
-            ${customerTable}
-            ${content}
-          </body>
-        </html>
-      `);
-  
-      win.document.close();
-      win.focus();
-      win.print();
-      win.close();
-      setPrintMode(false);
-    }, 100);
+  const handleSave = async () => {
+    try {
+      const docRef = await addDoc(collection(db, 'bills'), {
+        customer,
+        items: items.filter(item => item.qty > 0),
+        total,
+        balance,
+        createdAt: Timestamp.now(),
+      });
+
+      console.log("✅ Bill saved with ID:", docRef.id);
+      navigate(`/bill/${docRef.id}`);
+    } catch (error) {
+      console.error("❌ Error saving bill:", error);
+      alert("बिल सेव्ह करण्यात अडचण आली. कृपया पुन्हा प्रयत्न करा.");
+    }
   };
-  
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -160,20 +87,16 @@ try {
           ].map(({ label, field }) => (
             <div key={field}>
               <label>{label}</label>
-              {!printMode ? (
-                <input 
-                  type={field === 'eventDate' ? 'date' : 'text'}
-                  className="w-full border p-1"
-                  value={customer[field]}
-                  onChange={e => setCustomer({ ...customer, [field]: e.target.value })}
-                />
-              ) : (
-                <div className="p-1">{customer[field]}</div>
-              )}
+              <input
+                type={field === 'eventDate' ? 'date' : 'text'}
+                className="w-full border p-1"
+                value={customer[field]}
+                onChange={e => setCustomer({ ...customer, [field]: e.target.value })}
+              />
             </div>
           ))}
         </div>
-        <div ref={printRef}>
+
         <table className="w-full text-sm border mb-4">
           <thead className="bg-gray-100">
             <tr>
@@ -181,7 +104,7 @@ try {
               <th className="border p-1">तपशील</th>
               <th className="border p-1">नग</th>
               <th className="border p-1">दर</th>
-              <th className="border p-1">रुपये रक्कम</th>
+              <th className="border p-1">रक्कम</th>
             </tr>
           </thead>
           <tbody>
@@ -190,24 +113,20 @@ try {
                 <td className="border p-1 text-center">{idx + 1}</td>
                 <td className="border p-1">{item.name}</td>
                 <td className="border p-1 text-center">
-                  {!printMode ? (
-                    <input
-                      type="number"
-                      className="w-16 border text-center"
-                      value={item.qty}
-                      onChange={e => updateItem(item.id, 'qty', e.target.value)}
-                    />
-                  ) : item.qty}
+                  <input
+                    type="number"
+                    className="w-16 border text-center"
+                    value={item.qty}
+                    onChange={e => updateItem(item.id, 'qty', e.target.value)}
+                  />
                 </td>
                 <td className="border p-1 text-center">
-                  {!printMode ? (
-                    <input
-                      type="number"
-                      className="w-20 border text-center"
-                      value={item.rate}
-                      onChange={e => updateItem(item.id, 'rate', e.target.value)}
-                    />
-                  ) : `₹${item.rate}`}
+                  <input
+                    type="number"
+                    className="w-20 border text-center"
+                    value={item.rate}
+                    onChange={e => updateItem(item.id, 'rate', e.target.value)}
+                  />
                 </td>
                 <td className="border p-1 text-right">₹{item.qty * item.rate}</td>
               </tr>
@@ -224,30 +143,25 @@ try {
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div>
             <label>अडव्हान्स:</label>
-            {!printMode ? (
-              <input
-                type="number"
-                className="w-full border p-1"
-                value={customer.advance}
-                onChange={e => setCustomer({ ...customer, advance: e.target.value })}
-              />
-            ) : (
-              <div className="p-1">₹{customer.advance}</div>
-            )}
+            <input
+              type="number"
+              className="w-full border p-1"
+              value={customer.advance}
+              onChange={e => setCustomer({ ...customer, advance: e.target.value })}
+            />
           </div>
           <div className="text-right mt-6 font-bold">
-            बाकी:- ₹{balance}
+            बाकी: ₹{balance}
           </div>
-        </div>
         </div>
       </div>
 
       <div className="text-center mt-6 print:hidden">
         <button
-          onClick={handlePrint}
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded"
-          >
-          प्रिंट करा
+          onClick={handleSave}
+          className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-6 py-2 rounded"
+        >
+          सेव्ह करा आणि बघा
         </button>
       </div>
     </div>
