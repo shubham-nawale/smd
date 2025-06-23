@@ -30,16 +30,16 @@ const Home = () => {
         <div className="max-w-2xl mx-auto rounded overflow-hidden shadow-md">
           <Slider {...sliderSettings}>
             <div>
-              <img src="src/images/img1.jpg" alt="Slide 1" className="w-full object-cover rounded" />
+              <img src="/images/img1.jpg" alt="Slide 1" className="w-full object-cover rounded" />
             </div>
             <div>
-              <img src="src/images/img2.jpg" alt="Slide 2" className="w-full object-cover rounded" />
+              <img src="/images/img2.jpg" alt="Slide 2" className="w-full object-cover rounded" />
             </div>
             <div>
-              <img src="src/images/img3.jpg" alt="Slide 3" className="w-full object-cover rounded" />
+              <img src="/images/img3.jpg" alt="Slide 3" className="w-full object-cover rounded" />
             </div>
             <div>
-              <img src="src/images/img4.jpg" alt="Slide 4" className="w-full object-cover rounded" />
+              <img src="/images/img4.jpg" alt="Slide 4" className="w-full object-cover rounded" />
             </div>
           </Slider>
         </div>

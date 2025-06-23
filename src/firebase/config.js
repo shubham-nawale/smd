@@ -6,13 +6,13 @@ import { getFirestore } from 'firebase/firestore';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAKfrhD2CnRiS9WdmiVvCNq69e1VriQ3EA",
-  authDomain: "mandap-decor.firebaseapp.com",
-  projectId: "mandap-decor",
-  storageBucket: "mandap-decor.firebasestorage.app",
-  messagingSenderId: "783946075411",
-  appId: "1:783946075411:web:15e86c81ff71da68155ee6",
-  measurementId: "G-27HF693PYV"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
